@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartToko — Catat Keuangan Warung Jadi Mudah & Tidak Membosankan</title>
+  <meta name="description" content="Aplikasi pencatatan operasional harian untuk pemilik warteg dan rumah makan kecil. Cukup bicara atau ketik santai saat jam sibuk." />
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              green: '#16A34A',
+              dark: '#14532D',
+              amber: '#F59E0B',
+              orange: '#F97316',
+              surface: '#F8FAFC',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-emerald-200 selection:text-emerald-950 overflow-x-hidden">
+
+  <!-- ==================== 1. NAVBAR SEDERHANA ==================== -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <!-- Logo SmartToko -->
+        <a href="#" class="flex items-center gap-2.5 group focus:outline-none">
+          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20 group-hover:bg-emerald-700 transition-colors">
+            <!-- Ikon Warung & Catatan Sederhana -->
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 9.5L4.5 4h15L21 9.5M3 9.5c0 1.38 1.12 2.5 2.5 2.5S8 10.88 8 9.5c0 1.38 1.12 2.5 2.5 2.5S13 10.88 13 9.5c0 1.38 1.12 2.5 2.5 2.5S18 10.88 18 9.5c0 1.38 1.12 2.5 2.5 2.5S23 10.88 23 9.5M5 12v7a1 1 0 001 1h12a1 1 0 001-1v-7" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 16l1.75 1.75L15 14" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-[#14532D]">Smart<span class="text-[#16A34A]">Toko</span></span>
+          </div>
+        </a>
+
+        <!-- Navigasi Desktop -->
+        <nav class="hidden md:flex items-center gap-8" aria-label="Navigasi Utama">
+          <a href="#cara-kerja" class="text-base font-semibold text-slate-600 hover:text-emerald-700 transition-colors">Cara Kerja</a>
+          <a href="#fitur-utama" class="text-base font-semibold text-slate-600 hover:text-emerald-700 transition-colors">Fitur Utama</a>
+          <a href="#kontak" class="text-base font-semibold text-slate-600 hover:text-emerald-700 transition-colors">Kontak</a>
+        </nav>
+
+        <!-- Tombol CTA Kecil & Menu Mobile -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a
+            href="https://www.figma.com/design/KAD2CecHcECWFhDxaSeXJO/Untitled?node-id=0-1&t=38zTnpUvAgvn8prL-1"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-bold shadow-sm transition-all active:scale-[0.98]"
+          >
+            <span>Coba Demo</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+          </a>
+
+          <!-- Tombol Hamburger Mobile -->
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            aria-label="Buka menu navigasi"
+            aria-expanded="false"
+            class="md:hidden p-2.5 rounded-xl text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          >
+            <svg id="icon-menu-open" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <svg id="icon-menu-close" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dropdown Menu Mobile -->
+      <div id="mobile-menu" class="hidden md:hidden pb-4 pt-2 border-t border-slate-100 space-y-1">
+        <a href="#cara-kerja" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">Cara Kerja</a>
+        <a href="#fitur-utama" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">Fitur Utama</a>
+        <a href="#kontak" class="mobile-nav-link block px-4 py-3 rounded-xl text-base font-semibold text-slate-700 hover:bg-emerald-50 hover:text-emerald-700">Kontak</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== 2. HERO SECTION & 3. SIMULASI HP INTERAKTIF ==================== -->
+    <section class="relative pt-8 pb-16 sm:pt-14 sm:pb-24 overflow-hidden">
+      <!-- Dekorasi Latar Lembut -->
+      <div class="absolute inset-0 -z-10 pointer-events-none" aria-hidden="true">
+        <div class="absolute -top-24 -right-24 w-80 h-80 sm:w-[28rem] sm:h-[28rem] rounded-full bg-emerald-100/70 blur-3xl"></div>
+        <div class="absolute top-1/2 -left-24 w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-amber-100/60 blur-3xl"></div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          <!-- Kolom Kiri: Proposisi Nilai Unik di Awal -->
+          <div class="lg:col-span-7 text-left">
+            <!-- Badge Kecil -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100/90 border border-emerald-200 text-[#14532D] text-sm sm:text-base font-bold mb-6 shadow-xs">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#16A34A] animate-pulse"></span>
+              <span>Solusi Pembukuan Khusus Warteg &amp; Rumah Makan Kecil</span>
+            </div>
+
+            <!-- Headline Besar & Jelas -->
+            <h1 class="text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold text-slate-900 leading-[1.15] tracking-tight mb-5">
+              Catat Keuangan Warung Jadi <span class="text-[#16A34A]">Mudah</span> &amp; <span class="text-[#F97316]">Tidak Membosankan</span>
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-lg sm:text-xl text-slate-600 leading-relaxed mb-8 max-w-2xl">
+              Cukup bicara atau ketik santai saat jam sibuk—<strong class="font-semibold text-slate-800">SmartToko</strong> otomatis merapikan catatan belanja &amp; penjualan harian Anda, lengkap dengan pengingat dan target rutin agar usaha makin tenang.
+            </p>
+
+            <!-- Dua Tombol Ajakan Bertindak (CTA) -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 mb-8">
+              <!-- Tombol Utama (Hijau) -->
+              <a
+                href="https://www.figma.com/design/KAD2CecHcECWFhDxaSeXJO/Untitled?node-id=0-1&t=38zTnpUvAgvn8prL-1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-[#16A34A] hover:bg-emerald-700 text-white text-base sm:text-lg font-bold shadow-lg shadow-emerald-600/25 transition-all active:scale-[0.98]"
+              >
+                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                </svg>
+                <span>Coba Demo Prototype</span>
+              </a>
+
+              <!-- Tombol Sekunder (Putih/Outline Hijau) -->
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20SmartToko,%20saya%20tertarik%20mencoba%20aplikasi%20pencatatan%20warung"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-white hover:bg-emerald-50 text-[#14532D] border-2 border-[#16A34A] text-base sm:text-lg font-bold shadow-sm transition-all active:scale-[0.98]"
+              >
+                <!-- Ikon WhatsApp SVG -->
+                <svg class="w-5 h-5 text-[#16A34A] shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.758.459 3.475 1.331 4.988L2 22l5.188-1.359a9.927 9.927 0 004.843 1.253h.004c5.515 0 9.968-4.453 9.968-9.969A9.93 9.93 0 0019.08 4.88 9.914 9.914 0 0012.031 2zm5.805 14.129c-.246.693-1.43 1.326-1.982 1.408-.506.076-1.146.108-1.85-.115-.428-.136-.977-.317-1.681-.621-2.958-1.277-4.89-4.254-5.038-4.451-.147-.197-1.203-1.6-1.203-3.053 0-1.453.761-2.167 1.031-2.463.271-.296.59-.37.787-.37.197 0 .394.002.566.01.182.009.425-.069.665.507.246.591.836 2.043.91 2.191.074.148.123.32.025.517-.099.197-.148.32-.296.493-.148.172-.31.384-.443.516-.148.148-.302.308-.13.604.172.296.766 1.263 1.644 2.046 1.13 1.007 2.082 1.319 2.378 1.467.296.148.468.123.64-.074.173-.197.739-.862.936-1.158.197-.296.394-.246.665-.148.271.099 1.723.813 2.019.961.296.148.493.222.566.345.074.123.074.714-.172 1.407z" />
+                </svg>
+                <span>Hubungi via WhatsApp</span>
+              </a>
+            </div>
+
+            <!-- Poin Keunggulan Singkat -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4 border-t border-slate-200/80 text-sm sm:text-base font-medium text-slate-700">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">✓</span>
+                <span>Tanpa rumus rumit</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">✓</span>
+                <span>Bisa suara &amp; ketik</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">✓</span>
+                <span>Streak &amp; pengingat rutin</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Visual Interaktif & Simulasi Solusi (Mockup HP Interaktif) -->
+          <div id="simulasi-hp" class="lg:col-span-5 flex flex-col items-center">
+            <div class="w-full max-w-[380px]">
+              <!-- Label Instruksi Interaktif -->
+              <div class="text-center mb-3">
+                <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold uppercase tracking-wider text-emerald-800 bg-emerald-100/80 px-3.5 py-1.5 rounded-full">
+                  <span>👆 Klik Tab di Bawah untuk Simulasi Langsung</span>
+                </span>
+              </div>
+
+              <!-- 3 Tab Langkah Interaktif -->
+              <div role="tablist" aria-label="Simulasi Langkah SmartToko" class="grid grid-cols-3 gap-1.5 p-1.5 bg-slate-200/80 rounded-2xl mb-4">
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-step-1"
+                  aria-selected="true"
+                  aria-controls="panel-step-1"
+                  onclick="setMockupStep(1)"
+                  class="step-tab py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all bg-white text-[#14532D] shadow-sm"
+                >
+                  1. Input Suara
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-step-2"
+                  aria-selected="false"
+                  aria-controls="panel-step-2"
+                  onclick="setMockupStep(2)"
+                  class="step-tab py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-slate-900"
+                >
+                  2. Otomatis
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  id="tab-step-3"
+                  aria-selected="false"
+                  aria-controls="panel-step-3"
+                  onclick="setMockupStep(3)"
+                  class="step-tab py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all text-slate-600 hover:text-slate-900"
+                >
+                  3. Streak
+                </button>
+              </div>
+
+              <!-- Frame HP Mockup -->
+              <div class="bg-slate-900 p-3 rounded-[2.5rem] shadow-2xl border-4 border-slate-800">
+                <div class="bg-[#F8FAFC] rounded-[2rem] overflow-hidden min-h-[470px] flex flex-col justify-between border border-slate-200">
+                  
+                  <!-- Top Bar Aplikasi dalam HP -->
+                  <div class="bg-[#14532D] text-white px-5 pt-4 pb-4">
+                    <div class="flex items-center justify-between text-xs text-emerald-200 mb-2">
+                      <span>Warung Berkah</span>
+                      <span class="px-2 py-0.5 rounded-full bg-emerald-800 text-emerald-100 font-semibold">Hari Ini</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-left">
+                      <div class="bg-white/10 rounded-xl px-3 py-2">
+                        <p class="text-[11px] text-emerald-200">Uang Masuk</p>
+                        <p class="text-sm font-bold text-white">Rp 850.000</p>
+                      </div>
+                      <div class="bg-white/10 rounded-xl px-3 py-2">
+                        <p class="text-[11px] text-amber-200">Uang Keluar</p>
+                        <p id="mockup-keluar-amount" class="text-sm font-bold text-amber-300">Rp 320.000</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Konten Layar HP Dinamis -->
+                  <div class="p-5 flex-1 flex flex-col justify-between">
+                    
+                    <!-- TAHAP 1: INPUT SUARA / TEKS -->
+                    <div id="panel-step-1" role="tabpanel" aria-labelledby="tab-step-1" class="flex-1 flex flex-col justify-between space-y-4">
+                      <div class="text-center">
+                        <span class="inline-block text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full mb-2">
+                          Tahap 1 • Catat 1-Klik
+                        </span>
+                        <h2 class="text-lg font-extrabold text-slate-900">Bicara atau Ketik Santai</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Tanpa buka banyak menu saat jam ramai</p>
+                      </div>
+
+                      <!-- Ikon Mikrofon Hijau & Contoh Ucapan -->
+                      <div class="bg-white border border-slate-200 rounded-2xl p-4 text-center shadow-xs">
+                        <button
+                          type="button"
+                          onclick="setMockupStep(2)"
+                          aria-label="Ketuk mikrofon untuk simulasi"
+                          class="mx-auto w-16 h-16 rounded-full bg-[#16A34A] hover:bg-emerald-700 text-white flex items-center justify-center shadow-lg shadow-emerald-600/30 transition-transform active:scale-95 mb-3"
+                        >
+                          <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+                          </svg>
+                        </button>
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2.5">
+                          <p class="text-[11px] font-semibold text-emerald-700 uppercase tracking-wide">Contoh Ucapan Terdeteksi:</p>
+                          <p class="text-base font-extrabold text-slate-900 mt-0.5">“Beli ayam 2 kg, 50 ribu”</p>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-2">Atau ketik manual jika warung sedang bising</p>
+                      </div>
+
+                      <button
+                        type="button"
+                        onclick="setMockupStep(2)"
+                        class="w-full py-3.5 px-4 rounded-xl bg-[#16A34A] hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                      >
+                        <span>Simulasikan Input</span>
+                        <span>→</span>
+                      </button>
+                    </div>
+
+                    <!-- TAHAP 2: SMART COMPLETE -->
+                    <div id="panel-step-2" role="tabpanel" aria-labelledby="tab-step-2" class="hidden flex-1 flex flex-col justify-between space-y-3">
+                      <div class="text-center">
+                        <span class="inline-block text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full mb-1.5">
+                          Tahap 2 • Smart Complete
+                        </span>
+                        <h2 class="text-lg font-extrabold text-slate-900">Cek &amp; Konfirmasi Otomatis</h2>
+                      </div>
+
+                      <!-- Kartu Hasil Deteksi Otomatis -->
+                      <div class="bg-white border border-slate-200 rounded-2xl p-3.5 space-y-2.5 text-left shadow-xs">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                          <span class="text-xs text-slate-500">Kategori</span>
+                          <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-orange-100 text-orange-800">Bahan Baku</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                          <span class="text-xs text-slate-500">Nama Barang</span>
+                          <span class="text-sm font-bold text-slate-900">Ayam</span>
+                        </div>
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                          <span class="text-xs text-slate-500">Jumlah</span>
+                          <span class="text-sm font-bold text-slate-900">2 kg</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                          <span class="text-xs text-slate-500">Harga Total</span>
+                          <span class="text-sm font-extrabold text-emerald-700">Rp 50.000</span>
+                        </div>
+                      </div>
+
+                      <!-- Indikator Tombol Lengkapi & Konfirmasi -->
+                      <div class="space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                          <div class="py-2.5 px-3 rounded-xl bg-slate-100 border border-slate-200 text-slate-400 text-xs font-bold text-center">
+                            Lengkapi • Terisi ✓
+                          </div>
+                          <button
+                            type="button"
+                            onclick="setMockupStep(3)"
+                            class="py-2.5 px-3 rounded-xl bg-[#16A34A] hover:bg-emerald-700 text-white text-xs sm:text-sm font-extrabold text-center shadow-md shadow-emerald-600/25 transition-all active:scale-95"
+                          >
+                            Konfirmasi ✓
+                          </button>
+                        </div>
+                        <p class="text-[11px] text-center text-slate-500">Semua kolom lengkap! Klik <strong>Konfirmasi</strong> untuk menyimpan.</p>
+                      </div>
+                    </div>
+
+                    <!-- TAHAP 3: FEEDBACK & STREAK -->
+                    <div id="panel-step-3" role="tabpanel" aria-labelledby="tab-step-3" class="hidden flex-1 flex flex-col justify-between space-y-3">
+                      <!-- Pesan Apresiasi Positif -->
+                      <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3.5 text-center">
+                        <div class="w-10 h-10 mx-auto rounded-full bg-[#16A34A] text-white flex items-center justify-center font-bold text-lg mb-1.5 shadow-sm">
+                          ✓
+                        </div>
+                        <p class="text-base font-extrabold text-[#14532D]">Mantap!</p>
+                        <p class="text-xs font-medium text-emerald-800">Pengeluaran hari ini sudah tercatat.</p>
+                      </div>
+
+                      <!-- Kartu Streak 7 Hari -->
+                      <div class="bg-gradient-to-r from-[#14532D] to-emerald-800 text-white rounded-2xl p-3.5 flex items-center justify-between shadow-sm">
+                        <div>
+                          <p class="text-[11px] font-bold uppercase tracking-wider text-amber-300">Streak Rutin</p>
+                          <p class="text-lg font-extrabold">7 Hari Berturut-turut</p>
+                          <p class="text-[11px] text-emerald-100">Kebiasaan mencatat makin konsisten!</p>
+                        </div>
+                        <div class="w-11 h-11 rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-2xl shrink-0" aria-hidden="true">
+                          🔥
+                        </div>
+                      </div>
+
+                      <!-- Progress Harian 80% -->
+                      <div class="bg-white border border-slate-200 rounded-2xl p-3.5">
+                        <div class="flex items-center justify-between text-xs font-bold mb-1.5">
+                          <span class="text-slate-700">Progress Harian</span>
+                          <span class="text-[#F97316]">80% Sesi Tercatat</span>
+                        </div>
+                        <div class="w-full h-3 bg-slate-100 rounded-full overflow-hidden">
+                          <div class="h-full bg-[#F97316] rounded-full" style="width: 80%"></div>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onclick="setMockupStep(1)"
+                        class="w-full py-2.5 px-4 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs sm:text-sm transition-colors"
+                      >
+                        ↺ Ulangi Simulasi dari Awal
+                      </button>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== CARA KERJA SINGKAT (3 LANGKAH) ==================== -->
+    <section id="cara-kerja" class="py-14 sm:py-20 bg-white border-y border-slate-200/80">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <span class="text-sm font-bold uppercase tracking-wider text-[#16A34A]">Alur Kerja Praktis</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+            Selesai Mencatat dalam Hitungan Detik
+          </h2>
+          <p class="text-base sm:text-lg text-slate-600 mt-3">
+            Dirancang khusus agar tetap mudah dipakai tanpa pelatihan, bahkan saat warung sedang ramai pembeli.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Langkah 1 -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-3xl p-6 sm:p-7 relative">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-md shadow-emerald-600/20">
+              1
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Bicara atau Ketik Santai</h3>
+            <p class="text-base text-slate-600 leading-relaxed">
+              Tekan tombol besar <strong>Catat Transaksi</strong>, lalu ucapkan belanja atau penjualan seperti <em>“Beli ayam 2 kg, 50 ribu”</em>.
+            </p>
+          </div>
+
+          <!-- Langkah 2 -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-3xl p-6 sm:p-7 relative">
+            <div class="w-12 h-12 rounded-2xl bg-[#F59E0B] text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-md shadow-amber-500/20">
+              2
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Smart Complete Otomatis</h3>
+            <p class="text-base text-slate-600 leading-relaxed">
+              Sistem mengisi kategori, barang, jumlah, dan harga secara otomatis. Jika ada yang kurang, tombol <strong>Lengkapi</strong> akan mengingatkan.
+            </p>
+          </div>
+
+          <!-- Langkah 3 -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-3xl p-6 sm:p-7 relative">
+            <div class="w-12 h-12 rounded-2xl bg-[#14532D] text-white font-extrabold text-xl flex items-center justify-center mb-5 shadow-md shadow-emerald-950/20">
+              3
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Raih Streak &amp; Ringkasan</h3>
+            <p class="text-base text-slate-600 leading-relaxed">
+              Dapatkan apresiasi langsung, kumpulkan rekor harian, dan lihat keuntungan bersih warung sebelum tutup pukul 21.00.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. FITUR & MANFAAT UTAMA (2 PILAR) ==================== -->
+    <section id="fitur-utama" class="py-16 sm:py-24">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-14">
+          <span class="text-sm font-bold uppercase tracking-wider text-[#F97316]">Keunggulan SmartToko</span>
+          <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+            Dua Nilai Utama untuk Keseharian Warung Anda
+          </h2>
+          <p class="text-base sm:text-lg text-slate-600 mt-3">
+            Menggabungkan kecepatan pencatatan saat sibuk dengan motivasi ringan agar pembukuan tidak lagi terlewat.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+          
+          <!-- PILAR 1: MUDAH -->
+          <div class="bg-white rounded-3xl border-2 border-emerald-200/90 p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
+              <div class="w-13 h-13 p-3 rounded-2xl bg-emerald-100 text-[#16A34A] shrink-0">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#16A34A]">Pilar 1 • Mudah</span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Cepat &amp; Bebas Ribet Saat Jam Ramai</h3>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Fitur 1.1 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  1
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Dashboard Ringkas 1-Klik</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Tombol besar <strong>‘Catat Transaksi’</strong> langsung di layar beranda bersama kartu ringkasan uang masuk dan uang keluar tanpa sub-menu rumit.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fitur 1.2 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  2
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Input Suara &amp; Teks Hybrid</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Bicara santai saat tangan sibuk memasak atau melayani pembeli, atau beralih ke ketik cepat ketika suasana warung sedang bising.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fitur 1.3 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  3
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Smart Complete Otomatis</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Sistem mendeteksi nama barang, jumlah, dan harga secara otomatis serta mengingatkan kolom yang belum lengkap sebelum disimpan.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PILAR 2: TIDAK MEMBOSANKAN -->
+          <div class="bg-white rounded-3xl border-2 border-amber-200/90 p-6 sm:p-8 shadow-sm">
+            <div class="flex items-center gap-3.5 pb-6 mb-6 border-b border-slate-100">
+              <div class="w-13 h-13 p-3 rounded-2xl bg-amber-100 text-[#F97316] shrink-0">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xs font-extrabold uppercase tracking-wider text-[#F97316]">Pilar 2 • Tidak Membosankan</span>
+                <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Bangun Kebiasaan Mencatat Rutin</h3>
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <!-- Fitur 2.1 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-[#F97316] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  1
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Umpan Balik Positif</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Apresiasi langsung seperti <strong>“Mantap! Pengeluaran hari ini sudah tercatat.”</strong> setiap kali selesai mencatat agar terasa ringan dan menyenangkan.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fitur 2.2 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-[#F97316] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  2
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Progress Bar, Streak &amp; Lencana</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Pantau progres harian (contoh <strong>80%</strong>), raih rekor <strong>7 hari</strong> berturut-turut, hingga lencana <strong>“Pencatatan Rapi” 30 hari</strong> tanpa hukuman jika terlewat.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Fitur 2.3 -->
+              <div class="flex items-start gap-4">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 text-[#F97316] font-bold flex items-center justify-center shrink-0 mt-0.5">
+                  3
+                </div>
+                <div>
+                  <h4 class="text-lg font-bold text-slate-900">Smart Reminder &amp; Insight Ringkas</h4>
+                  <p class="text-base text-slate-600 mt-1 leading-relaxed">
+                    Pengingat ramah pukul <strong>21.00</strong> sebelum tutup warung beserta laporan keuntungan bersih, status stok aman, dan perbandingan pengeluaran mingguan (<strong>-8%</strong>).
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 5. PENAWARAN SEDERHANA & CTA BANNER ==================== -->
+    <section class="py-12 sm:py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-[#14532D] rounded-[2rem] p-7 sm:p-12 text-white shadow-xl relative overflow-hidden">
+          <!-- Aksen Visual -->
+          <div class="absolute -right-16 -bottom-16 w-64 h-64 rounded-full bg-emerald-600/30 blur-2xl pointer-events-none" aria-hidden="true"></div>
+          <div class="absolute -left-16 -top-16 w-56 h-56 rounded-full bg-amber-500/20 blur-2xl pointer-events-none" aria-hidden="true"></div>
+
+          <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+            <div class="max-w-xl">
+              <span class="inline-block px-3.5 py-1.5 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-300 text-xs sm:text-sm font-bold mb-4">
+                Paket Ramah UMKM &amp; Warung Makan
+              </span>
+              <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight mb-4">
+                Mulai Rapikan Catatan Warung Anda Hari Ini
+              </h2>
+              <p class="text-base sm:text-lg text-emerald-100 leading-relaxed mb-5">
+                Berlangganan ringan hanya <strong class="text-amber-300 font-extrabold text-xl">Rp 50.000/bulan</strong> — sudah termasuk sesi demo dan pendampingan langsung untuk pemilik warteg serta rumah makan kecil.
+              </p>
+              <div class="flex flex-wrap gap-3 text-sm text-emerald-100">
+                <span class="inline-flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-xl">✓ Gratis Coba Prototype</span>
+                <span class="inline-flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-xl">✓ Pendampingan Langsung</span>
+              </div>
+            </div>
+
+            <!-- Tombol CTA Besar -->
+            <div class="flex flex-col gap-3.5 shrink-0 sm:min-w-[260px]">
+              <a
+                href="https://www.figma.com/design/KAD2CecHcECWFhDxaSeXJO/Untitled?node-id=0-1&t=38zTnpUvAgvn8prL-1"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-[#F59E0B] hover:bg-amber-400 text-slate-950 font-extrabold text-base sm:text-lg shadow-lg transition-all active:scale-[0.98]"
+              >
+                <span>Coba Demo Sekarang</span>
+                <span>→</span>
+              </a>
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20SmartToko,%20saya%20ingin%20mendaftar%20atau%20mencoba%20demo%20SmartToko%20untuk%20warung%20saya"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white hover:bg-emerald-50 text-[#14532D] font-extrabold text-base sm:text-lg shadow-md transition-all active:scale-[0.98]"
+              >
+                <span>Daftar via WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 6. INFORMASI KONTAK ==================== -->
+    <section id="kontak" class="py-14 sm:py-20 bg-white border-t border-slate-200/80">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-sm font-bold uppercase tracking-wider text-[#16A34A]">Kontak &amp; Layanan</span>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+            Ada Pertanyaan atau Ingin Demo di Warung Anda?
+          </h2>
+          <p class="text-base text-slate-600 mt-2">
+            Tim SmartToko siap membantu Anda memulai pencatatan harian yang jauh lebih praktis.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- Kartu WhatsApp -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-11 h-11 rounded-xl bg-emerald-100 text-[#16A34A] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12.031 2c-5.516 0-9.969 4.453-9.969 9.969 0 1.758.459 3.475 1.331 4.988L2 22l5.188-1.359a9.927 9.927 0 004.843 1.253h.004c5.515 0 9.968-4.453 9.968-9.969A9.93 9.93 0 0019.08 4.88 9.914 9.914 0 0012.031 2zm5.805 14.129c-.246.693-1.43 1.326-1.982 1.408-.506.076-1.146.108-1.85-.115-.428-.136-.977-.317-1.681-.621-2.958-1.277-4.89-4.254-5.038-4.451-.147-.197-1.203-1.6-1.203-3.053 0-1.453.761-2.167 1.031-2.463.271-.296.59-.37.787-.37.197 0 .394.002.566.01.182.009.425-.069.665.507.246.591.836 2.043.91 2.191.074.148.123.32.025.517-.099.197-.148.32-.296.493-.148.172-.31.384-.443.516-.148.148-.302.308-.13.604.172.296.766 1.263 1.644 2.046 1.13 1.007 2.082 1.319 2.378 1.467.296.148.468.123.64-.074.173-.197.739-.862.936-1.158.197-.296.394-.246.665-.148.271.099 1.723.813 2.019.961.296.148.493.222.566.345.074.123.074.714-.172 1.407z" />
+                </svg>
+              </div>
+              <p class="text-sm font-semibold text-slate-500">WhatsApp</p>
+              <p class="text-lg font-extrabold text-slate-900 mt-0.5">0812-3456-7890</p>
+            </div>
+            <div class="mt-4 flex items-center gap-2">
+              <a
+                href="https://wa.me/6281234567890?text=Halo%20SmartToko,%20saya%20ingin%20bertanya%20tentang%20aplikasi%20SmartToko"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-[#16A34A] hover:bg-emerald-700 text-white text-sm font-bold transition-colors"
+              >
+                Chat Langsung
+              </a>
+              <button
+                type="button"
+                onclick="copyText('081234567890', 'Nomor WhatsApp berhasil disalin!')"
+                class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition-colors"
+                title="Salin Nomor WhatsApp"
+              >
+                Salin
+              </button>
+            </div>
+          </div>
+
+          <!-- Kartu Email -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-11 h-11 rounded-xl bg-amber-100 text-[#F97316] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                </svg>
+              </div>
+              <p class="text-sm font-semibold text-slate-500">Email</p>
+              <p class="text-lg font-extrabold text-slate-900 mt-0.5">halo@smarttoko.id</p>
+            </div>
+            <div class="mt-4 flex items-center gap-2">
+              <a
+                href="mailto:halo@smarttoko.id?subject=Pertanyaan%20SmartToko"
+                class="flex-1 inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-800 text-sm font-bold transition-colors"
+              >
+                Kirim Email
+              </a>
+              <button
+                type="button"
+                onclick="copyText('halo@smarttoko.id', 'Alamat email berhasil disalin!')"
+                class="px-3 py-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 text-sm font-semibold transition-colors"
+                title="Salin Email"
+              >
+                Salin
+              </button>
+            </div>
+          </div>
+
+          <!-- Kartu Area Layanan -->
+          <div class="bg-[#F8FAFC] border border-slate-200 rounded-2xl p-6 flex flex-col justify-between">
+            <div>
+              <div class="w-11 h-11 rounded-xl bg-emerald-100 text-[#14532D] flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                </svg>
+              </div>
+              <p class="text-sm font-semibold text-slate-500">Area Layanan</p>
+              <p class="text-lg font-extrabold text-slate-900 mt-0.5">Jabodetabek &amp; Sekitarnya</p>
+            </div>
+            <p class="mt-4 text-sm text-slate-600">
+              Tersedia kunjungan demo langsung ke lokasi warteg &amp; rumah makan.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER SEDERHANA ==================== -->
+  <footer class="bg-slate-900 text-slate-300 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="w-3 h-3 rounded-full bg-[#16A34A]"></span>
+        <span class="font-bold text-white">SmartToko</span>
+      </div>
+      <p class="text-sm text-slate-400">
+        © 2026 SmartToko — Aplikasi Pencatatan Operasional Warteg &amp; Rumah Makan Kecil.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Toast Notification (Pengganti alert) -->
+  <div
+    id="toast-notification"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold shadow-xl border border-slate-700 transition-all"
+  >
+    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+    <span id="toast-message">Berhasil disalin!</span>
+  </div>
+
+  <!-- ==================== JAVASCRIPT INTERAKTIF ==================== -->
+  <script>
+    // Toggle Menu Navigasi Mobile
+    (function initMobileMenu() {
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const iconOpen = document.getElementById('icon-menu-open');
+      const iconClose = document.getElementById('icon-menu-close');
+      const navLinks = document.querySelectorAll('.mobile-nav-link');
+
+      if (!menuBtn || !mobileMenu) return;
+
+      function toggleMenu(forceClose) {
+        const isOpen = !mobileMenu.classList.contains('hidden');
+        const shouldClose = typeof forceClose === 'boolean' ? forceClose : isOpen;
+
+        if (shouldClose) {
+          mobileMenu.classList.add('hidden');
+          iconOpen.classList.remove('hidden');
+          iconClose.classList.add('hidden');
+          menuBtn.setAttribute('aria-expanded', 'false');
+        } else {
+          mobileMenu.classList.remove('hidden');
+          iconOpen.classList.add('hidden');
+          iconClose.classList.remove('hidden');
+          menuBtn.setAttribute('aria-expanded', 'true');
+        }
+      }
+
+      menuBtn.addEventListener('click', function () {
+        toggleMenu();
+      });
+
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+          toggleMenu(true);
+        });
+      });
+    })();
+
+    // Simulasi Interaktif 3 Langkah pada Mockup HP
+    function setMockupStep(stepNumber) {
+      const panels = [1, 2, 3];
+      const keluarAmount = document.getElementById('mockup-keluar-amount');
+
+      panels.forEach(function (num) {
+        const tab = document.getElementById('tab-step-' + num);
+        const panel = document.getElementById('panel-step-' + num);
+
+        if (!tab || !panel) return;
+
+        if (num === stepNumber) {
+          panel.classList.remove('hidden');
+          tab.setAttribute('aria-selected', 'true');
+          tab.classList.add('bg-white', 'text-[#14532D]', 'shadow-sm');
+          tab.classList.remove('text-slate-600', 'hover:text-slate-900');
+        } else {
+          panel.classList.add('hidden');
+          tab.setAttribute('aria-selected', 'false');
+          tab.classList.remove('bg-white', 'text-[#14532D]', 'shadow-sm');
+          tab.classList.add('text-slate-600', 'hover:text-slate-900');
+        }
+      });
+
+      // Perbarui angka uang keluar secara dinamis pada Tahap 3 sebagai feedback nyata
+      if (keluarAmount) {
+        keluarAmount.textContent = stepNumber === 3 ? 'Rp 370.000' : 'Rp 320.000';
+      }
+    }
+
+    // Fungsi Salin Teks ke Clipboard dengan Toast Notification
+    let toastTimer = null;
+    function copyText(text, message) {
+      try {
+        const tempInput = document.createElement('textarea');
+        tempInput.value = text;
+        tempInput.setAttribute('readonly', '');
+        tempInput.style.position = 'absolute';
+        tempInput.style.left = '-9999px';
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showToast(message || 'Teks berhasil disalin!');
+      } catch (err) {
+        showToast('Silakan salin secara manual: ' + text);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notification');
+      const toastMsg = document.getElementById('toast-message');
+      if (!toast || !toastMsg) return;
+
+      toastMsg.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('flex');
+
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () {
+        toast.classList.add('hidden');
+        toast.classList.remove('flex');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
